@@ -102,8 +102,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AdDuplex.AdControl.Silverlight">
-      <HintPath>..\Libs\adduplex-sl-v.1.2.3\AdDuplex.AdControl.Silverlight.dll</HintPath>
+    <Reference Include="AdDuplex.WindowsPhone">
+      <HintPath>..\packages\AdDuplexWP8.2.8.0.3\lib\wp8\AdDuplex.WindowsPhone.dll</HintPath>
     </Reference>
     <Reference Include="FlurryWP7SDK">
       <HintPath>..\Libs\flurry\FlurryWP7SDK.dll</HintPath>

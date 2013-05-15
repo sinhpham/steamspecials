@@ -1,19 +1,19 @@
 ﻿<phone:PhoneApplicationPage
-                            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                            xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-                            xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
-                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                            xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit" xmlns:AdDuplex="clr-namespace:AdDuplex;assembly=AdDuplex.AdControl.Silverlight" x:Name="page" x:Class="SteamSpecialsWp.MainPage"
+							xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+							xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+							xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+							xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+							xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+							xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+							xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit" xmlns:AdDuplex="clr-namespace:AdDuplex;assembly=AdDuplex.WindowsPhone" x:Name="page" x:Class="SteamSpecialsWp.MainPage"
 							
-                            SupportedOrientations="Portrait"
-                            Orientation="Portrait"
-                            mc:Ignorable="d"
-                            d:DesignWidth="480"
-                            d:DesignHeight="768"
-                            shell:SystemTray.IsVisible="True"
-                            >
+							SupportedOrientations="Portrait"
+							Orientation="Portrait"
+							mc:Ignorable="d"
+							d:DesignWidth="480"
+							d:DesignHeight="768"
+							shell:SystemTray.IsVisible="True"
+							>
 	<phone:PhoneApplicationPage.Resources>
 		<Style x:Key="ListBoxItemStyle1" TargetType="ListBoxItem">
 			<Setter Property="Background" Value="Transparent"/>
@@ -159,19 +159,19 @@
 			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
 	</phone:PhoneApplicationPage.Resources>
-    
+	
 	<!-- Sample code showing usage of ApplicationBar
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton x:Name="appbar_button1" IconUri="/Images/appbar_button1.png" Text="Button 1"></shell:ApplicationBarIconButton>
-            <shell:ApplicationBarIconButton x:Name="appbar_button2" IconUri="/Images/appbar_button2.png" Text="Button 2"></shell:ApplicationBarIconButton>
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem x:Name="menuItem1" Text="MenuItem 1"></shell:ApplicationBarMenuItem>
-                <shell:ApplicationBarMenuItem x:Name="menuItem2" Text="MenuItem 2"></shell:ApplicationBarMenuItem>
-            </shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
-    -->
+	<phone:PhoneApplicationPage.ApplicationBar>
+		<shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+			<shell:ApplicationBarIconButton x:Name="appbar_button1" IconUri="/Images/appbar_button1.png" Text="Button 1"></shell:ApplicationBarIconButton>
+			<shell:ApplicationBarIconButton x:Name="appbar_button2" IconUri="/Images/appbar_button2.png" Text="Button 2"></shell:ApplicationBarIconButton>
+			<shell:ApplicationBar.MenuItems>
+				<shell:ApplicationBarMenuItem x:Name="menuItem1" Text="MenuItem 1"></shell:ApplicationBarMenuItem>
+				<shell:ApplicationBarMenuItem x:Name="menuItem2" Text="MenuItem 2"></shell:ApplicationBarMenuItem>
+			</shell:ApplicationBar.MenuItems>
+		</shell:ApplicationBar>
+	</phone:PhoneApplicationPage.ApplicationBar>
+	-->
 
 
 	<phone:PhoneApplicationPage.FontFamily>
@@ -187,25 +187,25 @@
 		<Binding Path="Main" Source="{StaticResource Locator}"/>
 	</phone:PhoneApplicationPage.DataContext>
 	<toolkit:TransitionService.NavigationInTransition>
-        <toolkit:NavigationInTransition>
-            <toolkit:NavigationInTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardIn"/>
-            </toolkit:NavigationInTransition.Backward>
-            <toolkit:NavigationInTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardIn"/>
-            </toolkit:NavigationInTransition.Forward>
-        </toolkit:NavigationInTransition>
-    </toolkit:TransitionService.NavigationInTransition>
-    <toolkit:TransitionService.NavigationOutTransition>
-        <toolkit:NavigationOutTransition>
-            <toolkit:NavigationOutTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardOut"/>
-            </toolkit:NavigationOutTransition.Backward>
-            <toolkit:NavigationOutTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardOut"/>
-            </toolkit:NavigationOutTransition.Forward>
-        </toolkit:NavigationOutTransition>
-    </toolkit:TransitionService.NavigationOutTransition>
+		<toolkit:NavigationInTransition>
+			<toolkit:NavigationInTransition.Backward>
+				<toolkit:TurnstileTransition Mode="BackwardIn"/>
+			</toolkit:NavigationInTransition.Backward>
+			<toolkit:NavigationInTransition.Forward>
+				<toolkit:TurnstileTransition Mode="ForwardIn"/>
+			</toolkit:NavigationInTransition.Forward>
+		</toolkit:NavigationInTransition>
+	</toolkit:TransitionService.NavigationInTransition>
+	<toolkit:TransitionService.NavigationOutTransition>
+		<toolkit:NavigationOutTransition>
+			<toolkit:NavigationOutTransition.Backward>
+				<toolkit:TurnstileTransition Mode="BackwardOut"/>
+			</toolkit:NavigationOutTransition.Backward>
+			<toolkit:NavigationOutTransition.Forward>
+				<toolkit:TurnstileTransition Mode="ForwardOut"/>
+			</toolkit:NavigationOutTransition.Forward>
+		</toolkit:NavigationOutTransition>
+	</toolkit:TransitionService.NavigationOutTransition>
 	<phone:PhoneApplicationPage.ApplicationBar>
 		<shell:ApplicationBar>
 			<shell:ApplicationBar.MenuItems>
@@ -219,7 +219,7 @@
 
 	<!--LayoutRoot contains the root grid where all other page content is placed-->
 	<Grid x:Name="LayoutRoot"
-	      Background="Transparent">
+		Background="Transparent">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition />
@@ -230,7 +230,7 @@
 
 		<!--ContentPanel - place additional content here-->
 		<Grid x:Name="ContentGrid"
-		      Grid.Row="1" Margin="12,0,0,0">
+			Grid.Row="1" Margin="12,0,0,0">
 			<ListBox x:Name="ssList" ItemsSource="{Binding SS}" ItemContainerStyle="{StaticResource ListBoxItemStyle1}" SelectionChanged="List_SelectionChanged" Style="{StaticResource ListBoxStyle1}" Margin="12,0,0,0" RenderTransformOrigin="0.5,0.5">
 				<ListBox.RenderTransform>
 					<CompositeTransform/>
