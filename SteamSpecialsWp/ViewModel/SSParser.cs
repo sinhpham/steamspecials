@@ -10,71 +10,62 @@ namespace SteamSpecialsWp.ViewModel
 {
     public static class SSParser
     {
-        //public static List<HtmlDocument> ProcessExtraPage(HtmlDocument htmlDoc)
-        //{
-        //    var ret = new List<HtmlDocument>();
-        //    if (htmlDoc.ParseErrors != null && htmlDoc.ParseErrors.Count() > 0)
-        //    {
+        public static int ParseNumberOfPages(HtmlDocument htmlDoc)
+        {
+            if (htmlDoc.ParseErrors != null && htmlDoc.ParseErrors.Count() > 0)
+            {
+                return -1;
+            }
+            else
+            {
+                if (htmlDoc.DocumentNode != null)
+                {
+                    var searchPages = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='search_pagination_right']");
+                    if (searchPages != null)
+                    {
+                        var pages = searchPages.SelectNodes("a");
+                        if (pages != null)
+                        {
+                            var pageUrls = new List<string>();
+                            foreach (var page in pages)
+                            {
+                                pageUrls.Add(page.GetAttributeValue("href", ""));
+                            }
+                            pageUrls.RemoveAt(pageUrls.Count - 1);
+                            var lastUrl = pageUrls[pageUrls.Count - 1];
+                            var num = int.Parse(lastUrl.Substring(lastUrl.IndexOf("page=") + 5));
 
-        //    }
-        //    else
-        //    {
-        //        if (htmlDoc.DocumentNode != null)
-        //        {
-        //            var searchPages = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='search_pagination_right']");
-        //            if (searchPages != null)
-        //            {
-        //                var pages = searchPages.SelectNodes("a");
-        //                if (pages != null)
-        //                {
-        //                    var pageUrls = new List<string>();
-        //                    foreach (var page in pages)
-        //                    {
-        //                        pageUrls.Add(page.GetAttributeValue("href", ""));
-        //                    }
-        //                    pageUrls.RemoveAt(pageUrls.Count - 1);
-        //                    var lastUrl = pageUrls[pageUrls.Count - 1];
-        //                    var num = int.Parse(lastUrl.Substring(lastUrl.IndexOf("page=") + 5));
-        //                    var url = "http://store.steampowered.com/search/?sort_by=&sort_order=ASC&specials=1&page=";
-        //                    pageUrls.Clear();
-        //                    if (num > 10)
-        //                    {
-        //                        // Only get 20 first pages.
-        //                        num = 10;
-        //                    }
-        //                    for (var i = 2; i <= num; ++i)
-        //                    {
-        //                        pageUrls.Add(url + i.ToString());
-        //                    }
-                            
-        //                    var extraDocs = new List<HtmlDocument>();
-        //                    Parallel.ForEach(pageUrls, pu =>
-        //                    {
-        //                        var pageStr = "";
-        //                        var wc = new WebClient();
-        //                        try
-        //                        {
-        //                            pageStr = wc.DownloadString(pu);
-        //                        }
-        //                        catch (System.Net.WebException)
-        //                        {
-        //                        }
-        //                        var currHtmlDoc = new HtmlDocument();
-        //                        currHtmlDoc.LoadHtml(pageStr);
-        //                        lock (ret)
-        //                        {
-        //                            ret.Add(currHtmlDoc);
-        //                        }
-        //                    });
-                            
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return ret;
-        //}
+                            return num;
+                        }
+                    }
+                }
+            }
+            return -1;
+        }
 
-        public static void ProcessSearchDoc(HtmlDocument htmlDoc, List<SteamSpecialItem> retList)
+        public static string ParseInfoText(HtmlDocument htmlDoc)
+        {
+            if (htmlDoc.ParseErrors != null && htmlDoc.ParseErrors.Count() > 0)
+            {
+                return "error";
+            }
+            else
+            {
+                if (htmlDoc.DocumentNode != null)
+                {
+                    var iText = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='search_pagination_left']");
+                    if (iText != null)
+                    {
+                        var str = HtmlEntity.DeEntitize(iText.InnerText);
+                        str = str.Trim();
+                        return str;
+                    }
+                }
+            }
+            return "error";
+        }
+
+        public static void ParseDealPage(HtmlDocument htmlDoc, List<SteamSpecialItem> retList)
         {
             if (htmlDoc.ParseErrors != null && htmlDoc.ParseErrors.Count() > 0)
             {
@@ -106,7 +97,6 @@ namespace SteamSpecialsWp.ViewModel
                     }
                 }
             }
-            
         }
 
         static SteamSpecialItem ParseNode(HtmlNode currNode)

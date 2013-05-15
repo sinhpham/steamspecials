@@ -94,7 +94,8 @@ namespace SteamSpecialsWp.ViewModel
         public MainViewModel()
         {
             DataLoaded = false;
-            PageNum = 1;
+            CurrPageNum = 1;
+            MaxPageNum = 1;
             IsRefreshing = false;
         }
 
@@ -127,13 +128,24 @@ namespace SteamSpecialsWp.ViewModel
             {
                 return;
             }
+
+            if (CurrPageNum < 1)
+            {
+                CurrPageNum = 1;
+            }
+            else if (CurrPageNum > MaxPageNum)
+            {
+                CurrPageNum = MaxPageNum;
+            }
+
             IsRefreshing = true;
+            InfoText = "";
             SS.Clear();
             _itemList.Clear();
             RaisePropertyChanged("InfoText");
 
             var wc = new SharpGIS.GZipWebClient();
-            var url = "http://store.steampowered.com/search/?sort_by=Name&sort_order=ASC&specials=1";
+            var url = "http://store.steampowered.com/search/?sort_by=Name&sort_order=ASC&specials=1&page=" + CurrPageNum;
 
             string res = "";
             var downloadTask = wc.DownloadStringTaskAsync(url);
@@ -152,20 +164,22 @@ namespace SteamSpecialsWp.ViewModel
                 return;
             }
 
-            var bw = new BackgroundWorker();
-            bw.DoWork += (bwSender, bwArg) =>
+
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(res);
+
+            MaxPageNum = Math.Max(SSParser.ParseNumberOfPages(htmlDoc), CurrPageNum);
+            var newInfoText = SSParser.ParseInfoText(htmlDoc);
+
+            _itemList.Clear();
+
+            SSParser.ParseDealPage(htmlDoc, _itemList);
+            foreach (var item in _itemList)
             {
-                _itemList.Clear();
-                var htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(res);
-                SSParser.ProcessSearchDoc(htmlDoc, _itemList);
-                Deployment.Current.Dispatcher.BeginInvoke(() =>
-                {
-                    PageNum = 1;
-                    IsRefreshing = false;
-                });
-            };
-            bw.RunWorkerAsync();
+                SS.Add(new SteamSpecialItemViewModel(item));
+            }
+            InfoText = newInfoText;
+            IsRefreshing = false;
         }
 
         public bool DataLoaded
@@ -207,73 +221,35 @@ namespace SteamSpecialsWp.ViewModel
             }
         }
 
-        int _pageNum;
-        public int PageNum
+        public int CurrPageNum { get; set; }
+
+        private int _mpn;
+        public int MaxPageNum
         {
             get
             {
-                return _pageNum;
+                return _mpn;
             }
             set
             {
-                if (value < 1 || (value - 1) * ItemPerPage >= _itemList.Count)
-                {
-                    return;
-                }
-                _pageNum = value;
-
-                var minIdx = (PageNum - 1) * ItemPerPage;
-                var maxIdx = PageNum * ItemPerPage;
-
-                var newIdx = minIdx;
-                var oldIdx = 0;
-                while (newIdx < maxIdx && newIdx < _itemList.Count)
-                {
-                    var ssivm = new SteamSpecialItemViewModel(_itemList[newIdx]);
-                    if (oldIdx < SS.Count)
-                    {
-                        SS[oldIdx] = ssivm;
-                    }
-                    else
-                    {
-                        SS.Add(ssivm);
-                    }
-                    ++newIdx;
-                    ++oldIdx;
-                }
-                while (oldIdx != SS.Count)
-                {
-                    SS.RemoveAt(oldIdx);
-                }
-
-                RaisePropertyChanged("InfoText");
+                _mpn = value;
             }
         }
+
+        private string _infoText;
         public string InfoText
         {
             get
             {
-                var minIdx = (PageNum - 1) * ItemPerPage + 1;
-                var maxIdx = minIdx + SS.Count - 1;
-                if (maxIdx < minIdx)
-                {
-                    FooterInfoText = "";
-                    return "Showing 0 - 0 of 0";
-                }
-
-                var more = _itemList.Count - maxIdx;
-                if (more > 0)
-                {
-                    FooterInfoText = more.ToString() + " more";
-                }
-                else
-                {
-                    FooterInfoText = "";
-                }
-
-                return "Showing " + minIdx.ToString() + " - " + maxIdx.ToString() + " of " + _itemList.Count.ToString();
+                return _infoText;
+            }
+            set
+            {
+                _infoText = value;
+                RaisePropertyChanged("InfoText");
             }
         }
+
         string _footerInfoText;
         public string FooterInfoText
         {
@@ -287,7 +263,7 @@ namespace SteamSpecialsWp.ViewModel
                 RaisePropertyChanged("FooterInfoText");
             }
         }
-        static int ItemPerPage = 25;
+
         // Tombstone support.
         public Boolean NeedSaveState
         {
@@ -299,7 +275,8 @@ namespace SteamSpecialsWp.ViewModel
         {
             public List<SteamSpecialItem> ItemList;
             public double ListVerticalOffset;
-            public int PageNum;
+            public int CurrPageNum;
+            public int MaxPageNum;
         }
 
         public StateData CurrentState
@@ -313,15 +290,18 @@ namespace SteamSpecialsWp.ViewModel
                 var state = new StateData();
                 state.ItemList = _itemList;
                 state.ListVerticalOffset = ListVerticalOffset;
-                state.PageNum = PageNum;
+                state.CurrPageNum = CurrPageNum;
+                state.MaxPageNum = MaxPageNum;
                 return state;
             }
         }
+
         public void LoadFromState(StateData state)
         {
             NeedSaveState = true;
             _itemList = state.ItemList;
-            PageNum = state.PageNum;
+            CurrPageNum = state.CurrPageNum;
+            MaxPageNum = state.MaxPageNum;
             ListVerticalOffset = state.ListVerticalOffset;
             DataLoaded = true;
         }
