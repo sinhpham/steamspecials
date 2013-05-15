@@ -65,7 +65,7 @@ namespace SteamSpecialsWp.ViewModel
             return "error";
         }
 
-        public static void ParseDealPage(HtmlDocument htmlDoc, List<SteamSpecialItem> retList)
+        public static void ParseDealPage(HtmlDocument htmlDoc, ICollection<SteamSpecialItemViewModel> retList)
         {
             if (htmlDoc.ParseErrors != null && htmlDoc.ParseErrors.Count() > 0)
             {
@@ -99,9 +99,9 @@ namespace SteamSpecialsWp.ViewModel
             }
         }
 
-        static SteamSpecialItem ParseNode(HtmlNode currNode)
+        static SteamSpecialItemViewModel ParseNode(HtmlNode currNode)
         {
-            var ret = new SteamSpecialItem();
+            var ret = new SteamSpecialItemViewModel();
             try
             {
                 var name = currNode.SelectSingleNode("div[@class='col search_name ellipsis']/h4");

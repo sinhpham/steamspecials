@@ -16,55 +16,13 @@ using HtmlAgilityPack;
 
 namespace SteamSpecialsWp.ViewModel
 {
-
-    public class SteamSpecialItem
-    {
-        public string Name { get; set; }
-        public string ImgUrl { get; set; }
-        public string Link { get; set; }
-        public string OldPrice { get; set; }
-        public string NewPrice { get; set; }
-        public string MetaScore { get; set; }
-        public string TypeImg { get; set; }
-        public string PlatformImg { get; set; }
-        public string Cat_Release { get; set; }
-    }
-
     public class SteamSpecialItemViewModel
     {
-        public SteamSpecialItemViewModel(SteamSpecialItem item)
+        public SteamSpecialItemViewModel()
         {
-            Name = item.Name;
-            ImgUrl = item.ImgUrl;
-            Link = item.Link;
-            OldPrice = item.OldPrice ?? "$-1";
-            NewPrice = item.NewPrice ?? "$-1";
-            MetaScore = item.MetaScore;
-            TypeImg = item.TypeImg;
-            PlatformImg = item.PlatformImg;
-            Cat_Release = item.Cat_Release;
-
-            SalePercentage = "";
-            SaleColor = ((SolidColorBrush)((App)App.Current).Resources["PhoneForegroundBrush"]);
-
-            double op;
-            double np;
-            if (double.TryParse(OldPrice.Substring(1), out op) &&
-                double.TryParse(NewPrice.Substring(1), out np))
-            {
-                var per = (np - op) / op * 100;
-                per = Math.Round(per);
-                SalePercentage = per.ToString() + "%";
-                if (per <= -75)
-                {
-                    SaleColor = new SolidColorBrush(Colors.Red);
-                }
-                else if (per <= -50)
-                {
-                    SaleColor = new SolidColorBrush(Colors.Green);
-                }
-            }
+            
         }
+
         public string Name { get; set; }
         public string ImgUrl { get; set; }
         public string Link { get; set; }
@@ -75,8 +33,46 @@ namespace SteamSpecialsWp.ViewModel
         public string PlatformImg { get; set; }
         public string Cat_Release { get; set; }
 
-        public string SalePercentage { get; set; }
-        public SolidColorBrush SaleColor { get; set; }
+        public string SalePercentage
+        {
+            get
+            {
+                double op;
+                double np;
+                if (double.TryParse(OldPrice.Substring(1), out op) &&
+                    double.TryParse(NewPrice.Substring(1), out np))
+                {
+                    var per = (np - op) / op * 100;
+                    per = Math.Round(per);
+                    return per.ToString() + "%";
+                }
+                return "";
+            }
+        }
+        public SolidColorBrush SaleColor
+        {
+            get
+            {
+                double op;
+                double np;
+                if (double.TryParse(OldPrice.Substring(1), out op) &&
+                    double.TryParse(NewPrice.Substring(1), out np))
+                {
+                    var per = (np - op) / op * 100;
+                    per = Math.Round(per);
+                    if (per <= -75)
+                    {
+                        return new SolidColorBrush(Colors.Red);
+                    }
+                    else if (per <= -50)
+                    {
+                        return new SolidColorBrush(Colors.Green);
+                    }
+                }
+                
+                return ((SolidColorBrush)((App)App.Current).Resources["PhoneForegroundBrush"]);
+            }
+        }
     }
 
     public class MainViewModel : ViewModelBase, IVMState<MainViewModel.StateData>
@@ -89,7 +85,6 @@ namespace SteamSpecialsWp.ViewModel
                 return _ss;
             }
         }
-        List<SteamSpecialItem> _itemList = new List<SteamSpecialItem>();
 
         public MainViewModel()
         {
@@ -141,7 +136,6 @@ namespace SteamSpecialsWp.ViewModel
             IsRefreshing = true;
             InfoText = "";
             SS.Clear();
-            _itemList.Clear();
             RaisePropertyChanged("InfoText");
 
             var wc = new SharpGIS.GZipWebClient();
@@ -171,13 +165,8 @@ namespace SteamSpecialsWp.ViewModel
             MaxPageNum = Math.Max(SSParser.ParseNumberOfPages(htmlDoc), CurrPageNum);
             var newInfoText = SSParser.ParseInfoText(htmlDoc);
 
-            _itemList.Clear();
-
-            SSParser.ParseDealPage(htmlDoc, _itemList);
-            foreach (var item in _itemList)
-            {
-                SS.Add(new SteamSpecialItemViewModel(item));
-            }
+            SSParser.ParseDealPage(htmlDoc, SS);
+            
             InfoText = newInfoText;
             IsRefreshing = false;
         }
@@ -273,7 +262,7 @@ namespace SteamSpecialsWp.ViewModel
 
         public class StateData
         {
-            public List<SteamSpecialItem> ItemList;
+            
             public double ListVerticalOffset;
             public int CurrPageNum;
             public int MaxPageNum;
@@ -288,7 +277,7 @@ namespace SteamSpecialsWp.ViewModel
                     return null;
                 }
                 var state = new StateData();
-                state.ItemList = _itemList;
+                
                 state.ListVerticalOffset = ListVerticalOffset;
                 state.CurrPageNum = CurrPageNum;
                 state.MaxPageNum = MaxPageNum;
@@ -299,7 +288,7 @@ namespace SteamSpecialsWp.ViewModel
         public void LoadFromState(StateData state)
         {
             NeedSaveState = true;
-            _itemList = state.ItemList;
+            
             CurrPageNum = state.CurrPageNum;
             MaxPageNum = state.MaxPageNum;
             ListVerticalOffset = state.ListVerticalOffset;
