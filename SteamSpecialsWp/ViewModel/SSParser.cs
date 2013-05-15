@@ -150,10 +150,10 @@ namespace SteamSpecialsWp.ViewModel
                     ret.PlatformImg = platformImg.GetAttributeValue("src", "nolink");
                 }
 
-                var cat_release = platformImg.NextSibling;
+                var cat_release = currNode.SelectSingleNode("div[@class='col search_name ellipsis']/p");
                 if (cat_release != null)
                 {
-                    ret.Cat_Release = HtmlEntity.DeEntitize(cat_release.InnerText);
+                    ret.Cat_Release = HtmlEntity.DeEntitize(cat_release.InnerText).Trim();
                 }
             }
             catch (Exception e)
