@@ -231,7 +231,7 @@
 		<!--ContentPanel - place additional content here-->
 		<Grid x:Name="ContentGrid"
 			Grid.Row="1" Margin="12,0,0,0">
-			<ListBox x:Name="ssList" ItemsSource="{Binding SS}" ItemContainerStyle="{StaticResource ListBoxItemStyle1}" SelectionChanged="List_SelectionChanged" Style="{StaticResource ListBoxStyle1}" Margin="12,0,0,0" RenderTransformOrigin="0.5,0.5">
+			<ListBox x:Name="ssList" ItemsSource="{Binding SSList}" ItemContainerStyle="{StaticResource ListBoxItemStyle1}" SelectionChanged="List_SelectionChanged" Style="{StaticResource ListBoxStyle1}" Margin="12,0,0,0" RenderTransformOrigin="0.5,0.5">
 				<ListBox.RenderTransform>
 					<CompositeTransform/>
 				</ListBox.RenderTransform>

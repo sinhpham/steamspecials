@@ -77,12 +77,12 @@ namespace SteamSpecialsWp.ViewModel
 
     public class MainViewModel : ViewModelBase, IVMState<MainViewModel.StateData>
     {
-        readonly ObservableCollection<SteamSpecialItemViewModel> _ss = new ObservableCollection<SteamSpecialItemViewModel>();
-        public ObservableCollection<SteamSpecialItemViewModel> SS
+        readonly ObservableCollection<SteamSpecialItemViewModel> _ssList = new ObservableCollection<SteamSpecialItemViewModel>();
+        public ObservableCollection<SteamSpecialItemViewModel> SSList
         {
             get
             {
-                return _ss;
+                return _ssList;
             }
         }
 
@@ -135,7 +135,7 @@ namespace SteamSpecialsWp.ViewModel
 
             IsRefreshing = true;
             InfoText = "";
-            SS.Clear();
+            SSList.Clear();
             RaisePropertyChanged("InfoText");
 
             var wc = new SharpGIS.GZipWebClient();
@@ -165,7 +165,7 @@ namespace SteamSpecialsWp.ViewModel
             MaxPageNum = Math.Max(SSParser.ParseNumberOfPages(htmlDoc), CurrPageNum);
             var newInfoText = SSParser.ParseInfoText(htmlDoc);
 
-            SSParser.ParseDealPage(htmlDoc, SS);
+            SSParser.ParseDealPage(htmlDoc, SSList);
             
             InfoText = newInfoText;
             IsRefreshing = false;
