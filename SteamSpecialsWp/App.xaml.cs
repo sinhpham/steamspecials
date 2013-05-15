@@ -36,12 +36,9 @@ namespace SteamSpecialsWp
             InitializePhoneApplication();
         }
 
-        public const string ApiKeyValue = "TR5NIY1VT5F3Z8YV8RSY";
-
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e) {
-            FlurryWP7SDK.Api.StartSession(ApiKeyValue);
         }
 
         // Code to execute when the application is activated (brought to foreground)
@@ -49,7 +46,6 @@ namespace SteamSpecialsWp
         private void Application_Activated(object sender, ActivatedEventArgs e) {
             if (!e.IsApplicationInstancePreserved) {
                 // Need to restore from tombstone.
-                FlurryWP7SDK.Api.StartSession(ApiKeyValue);
                 var x = App.Current.Resources["Locator"] as ViewModelLocator;
                 x.LoadStates();
             }
