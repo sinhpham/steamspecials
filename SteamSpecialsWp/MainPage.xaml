@@ -89,6 +89,18 @@
 					<ControlTemplate TargetType="ListBox">
 						<ScrollViewer x:Name="ScrollViewer" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}">
 							<StackPanel Orientation="Vertical" Width="468">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition/>
+									</Grid.ColumnDefinitions>
+									<TextBlock Text="Sort by: " VerticalAlignment="Top" Margin="0,29,0,0"/>
+									<toolkit:ListPicker Grid.Column="1" Width="150" ItemsSource="{Binding SortBy}" SelectedItem="{Binding SelectedSortBy, Mode=TwoWay}" />
+									<TextBlock Text="Order: " Grid.Column="2" VerticalAlignment="Top" Margin="0,29,0,0"/>
+									<toolkit:ListPicker Grid.Column="3" Width="80" HorizontalAlignment="Left" ItemsSource="{Binding SortOrder}" SelectedItem="{Binding SelectedSortOrder, Mode=TwoWay}"/>
+								</Grid>
 								<TextBlock TextWrapping="Wrap" Text="{Binding InfoText, Mode=OneWay}" Margin="0,0,0,20"/>
 								<ItemsPresenter d:LayoutOverrides="Width"/>
 								<TextBlock TextWrapping="Wrap" Text="{Binding FooterInfoText}" Margin="0,-30,0,0"/>

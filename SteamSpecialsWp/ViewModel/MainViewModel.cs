@@ -20,7 +20,7 @@ namespace SteamSpecialsWp.ViewModel
     {
         public SteamSpecialItemViewModel()
         {
-            
+
         }
 
         public string Name { get; set; }
@@ -69,7 +69,7 @@ namespace SteamSpecialsWp.ViewModel
                         return new SolidColorBrush(Colors.Green);
                     }
                 }
-                
+
                 return ((SolidColorBrush)((App)App.Current).Resources["PhoneForegroundBrush"]);
             }
         }
@@ -77,6 +77,27 @@ namespace SteamSpecialsWp.ViewModel
 
     public class MainViewModel : ViewModelBase, IVMState<MainViewModel.StateData>
     {
+        public MainViewModel()
+        {
+            DataLoaded = false;
+            CurrPageNum = 1;
+            MaxPageNum = 1;
+            IsRefreshing = false;
+
+            SortBy = new List<string>() {
+                "Name",
+                "Price",
+                "Metascore"
+            };
+            _selectedSortBy = "Name";
+
+            SortOrder = new List<string>() {
+                "Asc",
+                "Desc"
+            };
+            _selectedSortOrder = "Asc";
+        }
+
         readonly ObservableCollection<SteamSpecialItemViewModel> _ssList = new ObservableCollection<SteamSpecialItemViewModel>();
         public ObservableCollection<SteamSpecialItemViewModel> SSList
         {
@@ -86,15 +107,48 @@ namespace SteamSpecialsWp.ViewModel
             }
         }
 
-        public MainViewModel()
+        public List<string> SortBy { get; set; }
+        private string _selectedSortBy;
+        public string SelectedSortBy
         {
-            DataLoaded = false;
-            CurrPageNum = 1;
-            MaxPageNum = 1;
-            IsRefreshing = false;
+            get
+            {
+                return _selectedSortBy;
+            }
+            set
+            {
+                if (_selectedSortBy == value)
+                {
+                    return;
+                }
+
+                _selectedSortBy = value;
+                RaisePropertyChanged("SelectedSortBy");
+                Refresh();
+            }
         }
 
-        Random _randomId = new Random();
+        public List<string> SortOrder { get; set; }
+        private string _selectedSortOrder;
+        public string SelectedSortOrder
+        {
+            get
+            {
+                return _selectedSortOrder;
+            }
+            set
+            {
+                if (_selectedSortOrder == value)
+                {
+                    return;
+                }
+
+                _selectedSortOrder = value;
+                RaisePropertyChanged("SelectedSortOrder");
+                Refresh();
+            }
+        }
+
         bool _isRefreshing;
         bool IsRefreshing
         {
@@ -139,7 +193,7 @@ namespace SteamSpecialsWp.ViewModel
             RaisePropertyChanged("InfoText");
 
             var wc = new SharpGIS.GZipWebClient();
-            var url = "http://store.steampowered.com/search/?sort_by=Name&sort_order=ASC&specials=1&page=" + CurrPageNum;
+            var url = Helper.SSUrl(SelectedSortBy, SelectedSortOrder, CurrPageNum);
 
             string res = "";
             var downloadTask = wc.DownloadStringTaskAsync(url);
@@ -166,7 +220,7 @@ namespace SteamSpecialsWp.ViewModel
             var newInfoText = SSParser.ParseInfoText(htmlDoc);
 
             SSParser.ParseDealPage(htmlDoc, SSList);
-            
+
             InfoText = newInfoText;
             IsRefreshing = false;
         }
@@ -262,7 +316,7 @@ namespace SteamSpecialsWp.ViewModel
 
         public class StateData
         {
-            
+
             public double ListVerticalOffset;
             public int CurrPageNum;
             public int MaxPageNum;
@@ -277,7 +331,7 @@ namespace SteamSpecialsWp.ViewModel
                     return null;
                 }
                 var state = new StateData();
-                
+
                 state.ListVerticalOffset = ListVerticalOffset;
                 state.CurrPageNum = CurrPageNum;
                 state.MaxPageNum = MaxPageNum;
@@ -288,7 +342,7 @@ namespace SteamSpecialsWp.ViewModel
         public void LoadFromState(StateData state)
         {
             NeedSaveState = true;
-            
+
             CurrPageNum = state.CurrPageNum;
             MaxPageNum = state.MaxPageNum;
             ListVerticalOffset = state.ListVerticalOffset;

@@ -20,5 +20,15 @@ namespace SteamSpecialsWp.ViewModel
             }
             return null;
         }
+
+        public static string SSUrl(string sortBy, string sortOrder, int pageNum)
+        {
+            var ret = string.Format("http://store.steampowered.com/search/?sort_by={0}&sort_order={1}&specials=1&page={2}",
+                sortBy,
+                sortOrder.ToUpper(),
+                pageNum);
+
+            return ret;
+        }
     }
 }
