@@ -49,6 +49,7 @@ namespace SteamSpecialsWp.ViewModel
                 return "";
             }
         }
+
         public SolidColorBrush SaleColor
         {
             get
@@ -171,6 +172,7 @@ namespace SteamSpecialsWp.ViewModel
                 }
             }
         }
+
         public async void Refresh()
         {
             if (IsRefreshing)
@@ -320,6 +322,7 @@ namespace SteamSpecialsWp.ViewModel
             public double ListVerticalOffset;
             public int CurrPageNum;
             public int MaxPageNum;
+            public List<SteamSpecialItemViewModel> SSList;
         }
 
         public StateData CurrentState
@@ -335,6 +338,11 @@ namespace SteamSpecialsWp.ViewModel
                 state.ListVerticalOffset = ListVerticalOffset;
                 state.CurrPageNum = CurrPageNum;
                 state.MaxPageNum = MaxPageNum;
+                state.SSList = new List<SteamSpecialItemViewModel>();
+                foreach (var ssvm in SSList)
+                {
+                    state.SSList.Add(ssvm);
+                }
                 return state;
             }
         }
@@ -345,6 +353,11 @@ namespace SteamSpecialsWp.ViewModel
 
             CurrPageNum = state.CurrPageNum;
             MaxPageNum = state.MaxPageNum;
+
+            foreach (var ssvm in state.SSList)
+            {
+                SSList.Add(ssvm);
+            }
             ListVerticalOffset = state.ListVerticalOffset;
             DataLoaded = true;
         }
