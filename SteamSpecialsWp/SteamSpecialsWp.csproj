@@ -179,6 +179,8 @@
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
     </None>
+    <None Include="SteamSpecialsWp_2013_05_22_11_50_02.sap" />
+    <None Include="SteamSpecialsWp_2013_05_22_11_53_25.sap" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationIcon.png">
