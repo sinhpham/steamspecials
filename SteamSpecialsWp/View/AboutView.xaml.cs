@@ -37,7 +37,7 @@ namespace SteamSpecialsWp
 
         private void EmailMeClicked(object sender, System.Windows.RoutedEventArgs e) {
             var ect = new EmailComposeTask();
-            ect.Subject = "[Steam Specials]";
+            ect.Subject = "[Steam Specials 2]";
             ect.Body = contentTextBox.Text;
             ect.To = "phamansinh@gmail.com";
             try {
