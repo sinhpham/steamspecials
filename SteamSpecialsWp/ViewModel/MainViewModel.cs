@@ -39,7 +39,8 @@ namespace SteamSpecialsWp.ViewModel
             {
                 double op;
                 double np;
-                if (double.TryParse(OldPrice.Substring(1), out op) &&
+                if (OldPrice != null && NewPrice != null &&
+                    double.TryParse(OldPrice.Substring(1), out op) &&
                     double.TryParse(NewPrice.Substring(1), out np))
                 {
                     var per = (np - op) / op * 100;
@@ -56,7 +57,8 @@ namespace SteamSpecialsWp.ViewModel
             {
                 double op;
                 double np;
-                if (double.TryParse(OldPrice.Substring(1), out op) &&
+                if (OldPrice != null && NewPrice != null &&
+                    double.TryParse(OldPrice.Substring(1), out op) &&
                     double.TryParse(NewPrice.Substring(1), out np))
                 {
                     var per = (np - op) / op * 100;

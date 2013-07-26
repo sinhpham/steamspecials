@@ -161,8 +161,8 @@ namespace SteamSpecialsWp.ViewModel
             }
             if (string.IsNullOrEmpty(ret.OldPrice) || string.IsNullOrEmpty(ret.NewPrice))
             {
-                ret.OldPrice = "$-1";
-                ret.NewPrice = "$-1";
+                ret.OldPrice = null;
+                ret.NewPrice = null;
             }
             return ret;
         }
