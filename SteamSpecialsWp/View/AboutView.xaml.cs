@@ -12,8 +12,8 @@ namespace SteamSpecialsWp
         public AboutView() {
             InitializeComponent();
             var parts = Assembly.GetExecutingAssembly().FullName.Split(',');
-            var version = parts[1].Split('=')[1];
-            versionTextBlock.Text = "Version " + version;
+            _version = parts[1].Split('=')[1];
+            versionTextBlock.Text = "Version " + _version;
         }
 
         AboutViewModel MyVM {
@@ -21,6 +21,8 @@ namespace SteamSpecialsWp
                 return (AboutViewModel)this.DataContext;
             }
         }
+
+        string _version;
 
         protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e) {
             base.OnBackKeyPress(e);
@@ -37,7 +39,7 @@ namespace SteamSpecialsWp
 
         private void EmailMeClicked(object sender, System.Windows.RoutedEventArgs e) {
             var ect = new EmailComposeTask();
-            ect.Subject = "[Steam Specials 2]";
+            ect.Subject = string.Format("[Steam Specials {0}]", _version);
             ect.Body = contentTextBox.Text;
             ect.To = "phamansinh@gmail.com";
             try {
